@@ -1,0 +1,4 @@
+{"ts":"2026-09-11T22:34:58.913Z","kind":"load","url":"cowork-artifact://local/perch-news-roundup/index.html"}
+{"ts":"2026-09-12T09:55:18.778Z","kind":"load","url":"cowork-artifact://local/perch-news-roundup/index.html"}
+{"ts":"2026-09-12T09:55:18.946Z","kind":"console","level":"error","message":"Connecting to 'cowork-artifact://local/health' violates the following Content Security Policy directive: \"connect-src 'none'\". The action has been blocked.","source":"cowork-artifact://local/perch-news-roundup/index.html:1154","url":"cowork-artifact://local/perch-news-roundup/index.html"}
+{"ts":"2026-09-12T09:55:18.946Z","kind":"console","level":"error","message":"Fetch API cannot load cowork-artifact://local/health. Refused to connect because it violates the document's Content Security Policy.","source":"cowork-artifact://local/perch-news-roundup/index.html:1154","url":"cowork-artifact://local/perch-news-roundup/index.html"}

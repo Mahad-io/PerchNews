@@ -1,0 +1,1173 @@
+<!doctype html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Perch News Roundup",
+  "schemaVersion": 1,
+  "description": "Roundly — a warm, friendly twice-daily news-roundup product (working demo + marketing site). Single consistent typeface. Signup with GDPR double opt-in and granular consent, onboarding (categories, region, language, follows), preferences dashboard, noon & 9pm schedule controls, source-cited digest preview, and a GDPR privacy centre with export/delete."
+}
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roundly — your world, twice a day</title>
+<style>
+:root{
+  color-scheme: light;
+  --bg:#fbf7f0;
+  --surface:#ffffff;
+  --surface-2:#fff8ef;
+  --ink:#2c2620;
+  --ink-soft:#6b6357;
+  --ink-faint:#9a9084;
+  --line:#ece3d6;
+  --brand:#e8722c;      /* warm orange */
+  --brand-ink:#c85a18;
+  --brand-soft:#fdeadd;
+  --accent:#3f7d6e;     /* calm teal-green */
+  --accent-soft:#e3f0ec;
+  --sun:#f2b544;
+  --dusk:#7c6bb0;
+  --danger:#c8483a;
+  --radius:18px;
+  --radius-sm:12px;
+  --shadow:0 1px 2px rgba(44,38,32,.04), 0 8px 30px rgba(44,38,32,.06);
+  --shadow-lg:0 30px 60px rgba(44,38,32,.14);
+  --font:"Nunito", ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; font-family:var(--font); background:var(--bg); color:var(--ink);
+  line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&display=swap');
+h1,h2,h3,.serif{font-family:var(--font); font-weight:800; letter-spacing:-.02em}
+a{color:var(--brand-ink); text-decoration:none}
+button{font-family:inherit}
+img{max-width:100%}
+.wrap{max-width:1120px; margin:0 auto; padding:0 22px}
+.hidden{display:none !important}
+
+/* buttons */
+.btn{display:inline-flex; align-items:center; gap:.5rem; border:none; cursor:pointer; font-weight:800;
+  padding:.8rem 1.3rem; border-radius:999px; font-size:.98rem; transition:transform .12s ease, box-shadow .2s, background .2s; }
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--brand); color:#fff; box-shadow:0 8px 20px rgba(232,114,44,.28)}
+.btn-primary:hover{background:var(--brand-ink)}
+.btn-ghost{background:transparent; color:var(--ink); border:2px solid var(--line)}
+.btn-ghost:hover{border-color:var(--brand); color:var(--brand-ink)}
+.btn-soft{background:var(--brand-soft); color:var(--brand-ink)}
+.btn-soft:hover{background:#fbdcc7}
+.btn-block{width:100%; justify-content:center}
+.btn-sm{padding:.5rem .9rem; font-size:.85rem}
+.btn:disabled{opacity:.5; cursor:not-allowed}
+
+/* top nav */
+header.nav{position:sticky; top:0; z-index:40; background:rgba(251,247,240,.85); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+.nav-in{display:flex; align-items:center; justify-content:space-between; height:70px}
+.logo{display:flex; align-items:center; gap:.55rem; font-family:var(--font); font-weight:700; font-size:1.4rem; color:var(--ink); cursor:pointer}
+.logo .mark{width:34px; height:34px; flex:0 0 auto}
+.nav-links{display:flex; align-items:center; gap:1.5rem}
+.nav-links a{color:var(--ink-soft); font-weight:700; font-size:.95rem}
+.nav-links a:hover{color:var(--brand-ink)}
+@media(max-width:760px){ .nav-links a.nav-hide{display:none} }
+
+/* hero */
+.hero{padding:72px 0 40px; position:relative; overflow:hidden}
+.hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:40px; align-items:center}
+.badge{display:inline-flex; align-items:center; gap:.5rem; background:var(--accent-soft); color:var(--accent); font-weight:800; font-size:.82rem; padding:.4rem .8rem; border-radius:999px; margin-bottom:1.1rem}
+.hero h1{font-size:clamp(2.4rem,5vw,3.9rem); line-height:1.02; margin:.2rem 0 1rem}
+.hero h1 .u{color:var(--brand); position:relative}
+.hero p.lead{font-size:1.2rem; color:var(--ink-soft); max-width:33ch; margin:0 0 1.8rem}
+.hero-cta{display:flex; gap:.8rem; flex-wrap:wrap; align-items:center}
+.trust{margin-top:1.4rem; display:flex; gap:1.4rem; flex-wrap:wrap; color:var(--ink-faint); font-size:.85rem; font-weight:700}
+.trust span{display:inline-flex; align-items:center; gap:.4rem}
+@media(max-width:860px){ .hero-grid{grid-template-columns:1fr} .hero p.lead{max-width:none} }
+
+/* phone mock */
+.phone{background:var(--surface); border-radius:30px; box-shadow:var(--shadow-lg); border:1px solid var(--line); padding:18px; max-width:360px; margin:0 auto; transform:rotate(1.2deg)}
+.phone-head{display:flex; align-items:center; justify-content:space-between; font-size:.8rem; color:var(--ink-faint); font-weight:800; padding:0 6px 12px}
+.mail{background:var(--surface-2); border:1px solid var(--line); border-radius:16px; overflow:hidden}
+.mail-top{background:linear-gradient(120deg,var(--sun),var(--brand)); color:#fff; padding:14px 16px}
+.mail-top .kick{font-weight:800; font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; opacity:.95}
+.mail-top .ttl{font-family:var(--font); font-weight:700; font-size:1.15rem; margin-top:2px}
+.mail-sec{padding:12px 16px; border-bottom:1px solid var(--line)}
+.mail-sec:last-child{border-bottom:none}
+.mail-sec .lab{font-size:.68rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:6px}
+.mail-item{font-size:.86rem; font-weight:700; margin-bottom:3px}
+.mail-src{font-size:.7rem; color:var(--ink-faint); font-weight:800}
+.mail-src b{color:var(--brand-ink)}
+
+/* sections */
+section.band{padding:64px 0}
+section.band.alt{background:var(--surface)}
+.sec-head{text-align:center; max-width:640px; margin:0 auto 42px}
+.sec-head .badge{margin-bottom:.8rem}
+.sec-head h2{font-size:clamp(1.8rem,3.5vw,2.6rem); margin:.2rem 0 .6rem}
+.sec-head p{color:var(--ink-soft); font-size:1.08rem; margin:0}
+
+.cards{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+@media(max-width:860px){ .cards{grid-template-columns:1fr} }
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow)}
+.card .ic{width:46px; height:46px; border-radius:12px; display:grid; place-items:center; font-size:1.4rem; margin-bottom:14px; background:var(--brand-soft)}
+.card h3{font-size:1.2rem; margin:0 0 .4rem}
+.card p{color:var(--ink-soft); margin:0; font-size:.96rem}
+
+/* how it works timeline */
+.steps{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; counter-reset:step}
+@media(max-width:860px){ .steps{grid-template-columns:1fr 1fr} }
+.step{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:22px; position:relative}
+.step .n{width:34px;height:34px;border-radius:999px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:900;margin-bottom:10px}
+.step h4{margin:0 0 .3rem; font-size:1.05rem; font-family:var(--font)}
+.step p{margin:0; color:var(--ink-soft); font-size:.9rem}
+
+/* categories preview grid */
+.cat-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px}
+.cat-chip{display:flex; align-items:center; gap:.5rem; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:12px 14px; font-weight:800; font-size:.9rem}
+.cat-chip .e{font-size:1.2rem}
+
+/* footer */
+footer{background:#2c2620; color:#e9e1d4; padding:48px 0 30px; margin-top:20px}
+footer .cols{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:30px}
+@media(max-width:760px){ footer .cols{grid-template-columns:1fr 1fr} }
+footer h5{color:#fff; font-family:var(--font); font-size:1rem; margin:0 0 .8rem}
+footer a{display:block; color:#c9bfae; font-weight:600; font-size:.9rem; margin-bottom:.5rem; cursor:pointer}
+footer a:hover{color:var(--sun)}
+.foot-bot{border-top:1px solid #45392e; margin-top:30px; padding-top:18px; font-size:.82rem; color:#a99e8c; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px}
+
+/* ---------- modal / app shell ---------- */
+.overlay{position:fixed; inset:0; background:rgba(44,38,32,.5); backdrop-filter:blur(4px); z-index:100; display:grid; place-items:center; padding:20px}
+.modal{background:var(--bg); border-radius:24px; width:min(680px,100%); max-height:92vh; overflow:auto; box-shadow:var(--shadow-lg); position:relative}
+.modal.wide{width:min(980px,100%)}
+.modal-pad{padding:30px}
+.modal-close{position:absolute; top:16px; right:16px; width:38px;height:38px;border-radius:999px; border:none; background:var(--line); cursor:pointer; font-size:1.1rem; color:var(--ink); z-index:5}
+.modal-close:hover{background:#e2d7c7}
+
+/* forms */
+.field{margin-bottom:16px}
+.field label{display:block; font-weight:800; font-size:.9rem; margin-bottom:.35rem}
+.field .hint{font-size:.8rem; color:var(--ink-faint); font-weight:600; margin-top:.3rem}
+.input{width:100%; padding:.85rem 1rem; border:2px solid var(--line); border-radius:12px; font-size:1rem; font-family:inherit; background:var(--surface); color:var(--ink)}
+.input:focus{outline:none; border-color:var(--brand)}
+.err{color:var(--danger); font-size:.82rem; font-weight:800; margin-top:.3rem}
+
+/* consent checkboxes */
+.consent{display:flex; gap:.7rem; align-items:flex-start; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin-bottom:10px; cursor:pointer}
+.consent input{margin-top:4px; width:18px;height:18px; accent-color:var(--brand); flex:0 0 auto}
+.consent .ct{font-size:.88rem; color:var(--ink-soft)}
+.consent .ct b{color:var(--ink)}
+.req::after{content:" *"; color:var(--brand)}
+
+/* stepper */
+.stepper{display:flex; gap:8px; margin-bottom:22px}
+.stepper .dot{flex:1; height:6px; border-radius:999px; background:var(--line)}
+.stepper .dot.on{background:var(--brand)}
+.step-title{font-family:var(--font); font-size:1.5rem; margin:0 0 .2rem}
+.step-sub{color:var(--ink-soft); margin:0 0 20px}
+
+/* selectable tiles */
+.tiles{display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px}
+.tile{border:2px solid var(--line); background:var(--surface); border-radius:14px; padding:14px; cursor:pointer; text-align:left; transition:.15s; position:relative}
+.tile:hover{border-color:var(--brand)}
+.tile.sel{border-color:var(--brand); background:var(--brand-soft)}
+.tile .e{font-size:1.5rem; display:block; margin-bottom:6px}
+.tile .t{font-weight:800; font-size:.92rem}
+.tile .d{font-size:.75rem; color:var(--ink-faint); font-weight:600}
+.tile .tick{position:absolute; top:8px; right:8px; width:22px;height:22px;border-radius:999px; background:var(--brand); color:#fff; display:none; place-items:center; font-size:.7rem; font-weight:900}
+.tile.sel .tick{display:grid}
+
+.seg{display:inline-flex; background:var(--surface); border:2px solid var(--line); border-radius:999px; padding:4px; gap:4px; flex-wrap:wrap}
+.seg button{border:none; background:transparent; padding:.5rem 1rem; border-radius:999px; font-weight:800; cursor:pointer; color:var(--ink-soft); font-size:.9rem}
+.seg button.on{background:var(--brand); color:#fff}
+
+.follow-row{display:flex; gap:.6rem; align-items:center; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin-bottom:8px}
+.avatar{width:38px;height:38px;border-radius:999px; background:var(--accent-soft); color:var(--accent); display:grid;place-items:center; font-weight:900; flex:0 0 auto}
+.follow-row .meta{flex:1}
+.follow-row .meta .nm{font-weight:800; font-size:.92rem}
+.follow-row .meta .bio{font-size:.78rem; color:var(--ink-faint); font-weight:600}
+
+/* toast */
+.toast{position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(140%); background:var(--ink); color:#fff; padding:.9rem 1.3rem; border-radius:999px; font-weight:800; z-index:200; box-shadow:var(--shadow-lg); transition:transform .35s cubic-bezier(.2,1.4,.4,1); font-size:.92rem}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ---------- dashboard ---------- */
+.dash{min-height:100vh; background:var(--bg)}
+.dash-grid{display:grid; grid-template-columns:250px 1fr; gap:0; min-height:calc(100vh - 70px)}
+@media(max-width:860px){ .dash-grid{grid-template-columns:1fr} .side{display:none} }
+.side{border-right:1px solid var(--line); padding:26px 18px; position:sticky; top:70px; height:calc(100vh - 70px)}
+.side .snav{display:flex; flex-direction:column; gap:4px}
+.side .snav button{display:flex; align-items:center; gap:.7rem; border:none; background:transparent; text-align:left; padding:.7rem .8rem; border-radius:12px; font-weight:800; color:var(--ink-soft); cursor:pointer; font-size:.95rem; width:100%}
+.side .snav button:hover{background:var(--surface)}
+.side .snav button.on{background:var(--brand-soft); color:var(--brand-ink)}
+.dash-main{padding:30px}
+.dash-main .page{max-width:820px}
+.dash-h{font-family:var(--font); font-size:1.9rem; margin:0 0 .2rem}
+.dash-sub{color:var(--ink-soft); margin:0 0 24px}
+
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:22px; margin-bottom:18px; box-shadow:var(--shadow)}
+.panel h3{margin:0 0 .3rem; font-size:1.15rem}
+.panel .desc{color:var(--ink-soft); font-size:.9rem; margin:0 0 16px}
+.row-split{display:flex; justify-content:space-between; align-items:center; gap:14px; padding:14px 0; border-bottom:1px solid var(--line)}
+.row-split:last-child{border-bottom:none}
+.row-split .l .t{font-weight:800}
+.row-split .l .s{font-size:.82rem; color:var(--ink-faint); font-weight:600}
+
+/* toggle switch */
+.switch{position:relative; width:50px; height:28px; flex:0 0 auto}
+.switch input{opacity:0; width:0;height:0}
+.slider{position:absolute; inset:0; background:var(--line); border-radius:999px; cursor:pointer; transition:.2s}
+.slider::before{content:""; position:absolute; width:22px;height:22px; left:3px; top:3px; background:#fff; border-radius:999px; transition:.2s; box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch input:checked + .slider{background:var(--accent)}
+.switch input:checked + .slider::before{transform:translateX(22px)}
+
+/* schedule cards */
+.sched{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+@media(max-width:620px){ .sched{grid-template-columns:1fr} }
+.sched-card{border:2px solid var(--line); border-radius:16px; padding:18px; background:var(--surface-2)}
+.sched-card.on{border-color:var(--brand)}
+.sched-card .when{display:flex; align-items:center; gap:.6rem; font-family:var(--font); font-size:1.5rem; font-weight:700}
+.sched-card .lab{color:var(--ink-soft); font-size:.85rem; font-weight:700; margin:.2rem 0 12px}
+.sched-card .time-in{display:flex; gap:.5rem; align-items:center; margin-top:8px}
+
+/* digest preview */
+.digest{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow)}
+.digest-hd{background:linear-gradient(120deg,var(--sun),var(--brand)); color:#fff; padding:22px 24px}
+.digest-hd .kick{text-transform:uppercase; letter-spacing:.1em; font-weight:900; font-size:.72rem; opacity:.95}
+.digest-hd h2{color:#fff; margin:.2rem 0 0; font-size:1.6rem}
+.digest-hd .sub{font-size:.9rem; opacity:.95; font-weight:700}
+.dsec{padding:18px 24px; border-bottom:1px solid var(--line)}
+.dsec:last-child{border-bottom:none}
+.dsec .dlab{display:flex; align-items:center; gap:.5rem; font-weight:900; color:var(--accent); font-size:.8rem; text-transform:uppercase; letter-spacing:.05em; margin-bottom:12px}
+.story{padding:10px 0; border-bottom:1px dashed var(--line)}
+.story:last-child{border-bottom:none}
+.story h4{margin:0 0 .25rem; font-family:var(--font); font-size:1.08rem; line-height:1.25}
+.story p{margin:0 0 .4rem; font-size:.9rem; color:var(--ink-soft)}
+.story .foot{display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; font-size:.78rem}
+.src-pill{display:inline-flex; align-items:center; gap:.35rem; background:var(--surface-2); border:1px solid var(--line); padding:.2rem .6rem; border-radius:999px; font-weight:800; color:var(--brand-ink)}
+.src-pill .dotm{width:8px;height:8px;border-radius:999px; background:var(--brand)}
+.story .foot .meta{color:var(--ink-faint); font-weight:700}
+.balance{display:inline-flex; align-items:center; gap:.35rem; background:var(--accent-soft); color:var(--accent); padding:.2rem .6rem; border-radius:999px; font-weight:800; font-size:.72rem}
+
+.sourcebar{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
+.tag{background:var(--surface-2); border:1px solid var(--line); border-radius:999px; padding:.3rem .7rem; font-size:.82rem; font-weight:800; display:inline-flex; gap:.4rem; align-items:center}
+.tag .x{cursor:pointer; color:var(--ink-faint); font-weight:900}
+.tag .x:hover{color:var(--danger)}
+
+.notice{background:var(--accent-soft); border:1px solid #cfe4dd; color:#2f5d51; border-radius:12px; padding:12px 14px; font-size:.86rem; font-weight:700; display:flex; gap:.6rem; align-items:flex-start; margin-bottom:16px}
+.pill-count{background:var(--brand); color:#fff; border-radius:999px; padding:.05rem .5rem; font-size:.75rem; font-weight:900; margin-left:.4rem}
+.small-link{background:none;border:none;color:var(--brand-ink);font-weight:800;cursor:pointer;font-size:.85rem;padding:0}
+.two{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+@media(max-width:620px){ .two{grid-template-columns:1fr} }
+.legal{font-size:.9rem; color:var(--ink-soft)}
+.legal h4{font-family:var(--font); color:var(--ink); margin:1.2rem 0 .4rem}
+.danger-zone{border:2px solid #f0cfc9; background:#fdf3f1; border-radius:14px; padding:18px}
+</style>
+
+<!-- ============ PUBLIC SITE ============ -->
+<div id="site">
+<header class="nav">
+  <div class="wrap nav-in">
+    <div class="logo" onclick="scrollTop()">
+      <svg class="mark" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="20" fill="#fdeadd"/><circle cx="20" cy="20" r="12.5" fill="none" stroke="#e8722c" stroke-width="4.5"/><circle cx="20" cy="20" r="4.5" fill="#e8722c"/></svg>
+      Roundly
+    </div>
+    <nav class="nav-links">
+      <a class="nav-hide" onclick="go('#how')">How it works</a>
+      <a class="nav-hide" onclick="go('#features')">Features</a>
+      <a class="nav-hide" onclick="go('#privacy')">Privacy</a>
+      <a onclick="openLogin()">Log in</a>
+      <button class="btn btn-primary btn-sm" onclick="openSignup()">Get my roundup</button>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="badge">🕛 Noon &amp; 9pm · GDPR-compliant</span>
+      <h1>Your world, <span class="u">twice a day</span>.</h1>
+      <p class="lead">Roundly sends you two calm, beautifully-organised news roundups a day — pulled from across the web, sorted by what <em>you</em> care about, and clearly labelled so you always know where every story came from.</p>
+      <div class="hero-cta">
+        <button class="btn btn-primary" onclick="openSignup()">Start my free roundup →</button>
+        <button class="btn btn-ghost" onclick="openPreview()">See a sample digest</button>
+      </div>
+      <div class="trust">
+        <span>✓ No endless scroll</span>
+        <span>✓ Every source cited</span>
+        <span>✓ Unsubscribe in one click</span>
+      </div>
+    </div>
+    <div class="phone">
+      <div class="phone-head"><span>Roundly</span><span>12:00</span></div>
+      <div class="mail">
+        <div class="mail-top">
+          <div class="kick">Your Noon Roundup · Fri 11 Sep</div>
+          <div class="ttl">Good afternoon, Mahad ☀️</div>
+        </div>
+        <div class="mail-sec">
+          <div class="lab">🏛 Politics</div>
+          <div class="mail-item">Parliament debates new energy bill</div>
+          <div class="mail-src">via <b>Reuters</b> · <b>BBC</b> · <b>Guardian</b></div>
+        </div>
+        <div class="mail-sec">
+          <div class="lab">⚽ Sport</div>
+          <div class="mail-item">Late winner sends City top of the table</div>
+          <div class="mail-src">via <b>Sky Sports</b> · <b>The Athletic</b></div>
+        </div>
+        <div class="mail-sec">
+          <div class="lab">💻 Technology</div>
+          <div class="mail-item">New on-device AI chips announced</div>
+          <div class="mail-src">via <b>The Verge</b> · <b>Ars Technica</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band alt" id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="badge">Why Roundly</span>
+      <h2>News that respects your time and your trust</h2>
+      <p>Not a feed to get lost in. Two tidy emails, built entirely around your choices.</p>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="ic">🎯</div><h3>You pick everything</h3><p>Choose your categories, regions, language and how many stories per section. Deselect anything you don't want — instantly.</p></div>
+      <div class="card"><div class="ic">🔗</div><h3>Every source shown</h3><p>Each story lists the outlets it was aggregated from, with direct links. No mystery, no hidden agenda.</p></div>
+      <div class="card"><div class="ic">👥</div><h3>Follow who you love</h3><p>Track specific people, teams, companies or topics of high interest and get a dedicated section just for them.</p></div>
+      <div class="card"><div class="ic">⚖️</div><h3>Balanced by design</h3><p>Roundly pulls from a wide range of outlets across the spectrum and flags when a story leans one way.</p></div>
+      <div class="card"><div class="ic">🔒</div><h3>Private &amp; compliant</h3><p>Double opt-in signup, granular consent, one-click data export and delete. Built to the GDPR from day one.</p></div>
+      <div class="card"><div class="ic">🌍</div><h3>Your region &amp; language</h3><p>Local, national or global — and read it in the language you prefer. Set it once, change it anytime.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="how">
+  <div class="wrap">
+    <div class="sec-head"><span class="badge">How it works</span><h2>Set up in two minutes</h2><p>Then Roundly does the reading for you, twice a day, forever.</p></div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h4>Sign up</h4><p>Email &amp; password, confirm your consent, verify your inbox.</p></div>
+      <div class="step"><div class="n">2</div><h4>Tune it</h4><p>Pick categories, region, language, and who to follow.</p></div>
+      <div class="step"><div class="n">3</div><h4>Set your times</h4><p>Default noon &amp; 9pm — nudge them to suit you.</p></div>
+      <div class="step"><div class="n">4</div><h4>Relax</h4><p>Two tidy, fully-sourced roundups land in your inbox.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band alt">
+  <div class="wrap">
+    <div class="sec-head"><span class="badge">Cover everything</span><h2>A category for every corner of the world</h2><p>Mix and match as many as you like. Roundly keeps each one balanced and clearly separated.</p></div>
+    <div class="cat-grid" id="catShowcase"></div>
+  </div>
+</section>
+
+<section class="band" id="privacy">
+  <div class="wrap">
+    <div class="sec-head"><span class="badge">🔒 Safety &amp; trust</span><h2>Built to be safe to use</h2><p>Your data is yours. Here's exactly how we treat it.</p></div>
+    <div class="cards">
+      <div class="card"><div class="ic">✉️</div><h3>Double opt-in</h3><p>We only ever email you after you confirm via a verification link — no accidental or unwanted signups.</p></div>
+      <div class="card"><div class="ic">📋</div><h3>Granular consent</h3><p>Marketing, personalisation and essential emails are separate, timestamped consents you can withdraw anytime.</p></div>
+      <div class="card"><div class="ic">📦</div><h3>Export &amp; delete</h3><p>Download everything we hold, or erase your account entirely, right from your dashboard. No emails to support.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band alt">
+  <div class="wrap" style="text-align:center">
+    <h2 style="font-size:clamp(1.8rem,4vw,2.8rem); margin:0 0 .6rem">Ready to reclaim your news?</h2>
+    <p style="color:var(--ink-soft); font-size:1.1rem; margin:0 0 1.6rem">Free to start. Two roundups a day. Cancel in one click.</p>
+    <button class="btn btn-primary" onclick="openSignup()">Get my roundup →</button>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <div class="logo" style="color:#fff; margin-bottom:.8rem"><svg class="mark" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="#3a322a"/><circle cx="20" cy="20" r="12.5" fill="none" stroke="#e8722c" stroke-width="4.5"/><circle cx="20" cy="20" r="4.5" fill="#e8722c"/></svg> Roundly</div>
+        <p style="color:#a99e8c; font-size:.9rem; max-width:32ch">Your world, twice a day. A calmer way to stay informed.</p>
+      </div>
+      <div><h5>Product</h5><a onclick="go('#features')">Features</a><a onclick="go('#how')">How it works</a><a onclick="openPreview()">Sample digest</a><a onclick="openSignup()">Sign up</a></div>
+      <div><h5>Company</h5><a onclick="toast('This is a demo page 🙂')">About</a><a onclick="toast('This is a demo page 🙂')">Careers</a><a onclick="toast('This is a demo page 🙂')">Blog</a></div>
+      <div><h5>Legal</h5><a onclick="openLegal('privacy')">Privacy Policy</a><a onclick="openLegal('cookies')">Cookie Policy</a><a onclick="openLegal('terms')">Terms</a><a onclick="openLegal('gdpr')">Your GDPR rights</a></div>
+    </div>
+    <div class="foot-bot">
+      <span>© 2026 Roundly. A concept product.</span>
+      <span>Made with care · GDPR-ready</span>
+    </div>
+  </div>
+</footer>
+</div>
+
+<!-- ============ DASHBOARD (hidden until login) ============ -->
+<div id="app" class="dash hidden">
+  <header class="nav">
+    <div class="wrap nav-in">
+      <div class="logo" onclick="showTab('digest')">
+        <svg class="mark" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="#fdeadd"/><circle cx="20" cy="20" r="12.5" fill="none" stroke="#e8722c" stroke-width="4.5"/><circle cx="20" cy="20" r="4.5" fill="#e8722c"/></svg>
+        Roundly
+      </div>
+      <nav class="nav-links">
+        <span id="userchip" style="color:var(--ink-soft); font-weight:800; font-size:.9rem"></span>
+        <a onclick="logout()">Log out</a>
+      </nav>
+    </div>
+  </header>
+  <div class="wrap" style="max-width:1120px">
+  <div class="dash-grid">
+    <aside class="side">
+      <div class="snav">
+        <button data-tab="digest" onclick="showTab('digest')" class="on">📬 Today's digest</button>
+        <button data-tab="topics" onclick="showTab('topics')">🎯 Categories</button>
+        <button data-tab="region" onclick="showTab('region')">🌍 Region &amp; language</button>
+        <button data-tab="follow" onclick="showTab('follow')">👥 Following</button>
+        <button data-tab="schedule" onclick="showTab('schedule')">🕛 Schedule</button>
+        <button data-tab="account" onclick="showTab('account')">🔒 Account &amp; privacy</button>
+      </div>
+    </aside>
+    <main class="dash-main">
+      <div id="tab-digest" class="page"></div>
+      <div id="tab-topics" class="page hidden"></div>
+      <div id="tab-region" class="page hidden"></div>
+      <div id="tab-follow" class="page hidden"></div>
+      <div id="tab-schedule" class="page hidden"></div>
+      <div id="tab-account" class="page hidden"></div>
+    </main>
+  </div>
+  </div>
+</div>
+
+<!-- modal mount + toast -->
+<div id="modalMount"></div>
+<div id="toast" class="toast"></div>
+
+<script>
+/* ============================================================
+   PERCH — front-end demo application
+   All state persists in localStorage so the demo behaves like
+   a real product across reloads. The backend that actually
+   sends email lives in the /perch-backend files.
+   ============================================================ */
+
+/* ---------- data ---------- */
+const CATEGORIES = [
+  {id:'world',      e:'🌐', t:'World',        d:'Global affairs'},
+  {id:'politics',   e:'🏛',  t:'Politics',     d:'Government & policy'},
+  {id:'business',   e:'📈', t:'Business',      d:'Markets & economy'},
+  {id:'tech',       e:'💻', t:'Technology',    d:'AI, gadgets, web'},
+  {id:'science',    e:'🔬', t:'Science',       d:'Research & space'},
+  {id:'health',     e:'🩺', t:'Health',        d:'Medicine & wellbeing'},
+  {id:'sport',      e:'⚽', t:'Sport',         d:'Scores & transfers'},
+  {id:'culture',    e:'🎬', t:'Culture',       d:'Film, music, arts'},
+  {id:'climate',    e:'🌱', t:'Climate',       d:'Environment & energy'},
+  {id:'finance',    e:'💰', t:'Personal finance', d:'Money & markets'},
+  {id:'lifestyle',  e:'🧘', t:'Lifestyle',     d:'Food, travel, living'},
+  {id:'gaming',     e:'🎮', t:'Gaming',        d:'Games & esports'},
+  {id:'education',  e:'🎓', t:'Education',      d:'Schools & unis'},
+  {id:'local',      e:'📍', t:'Local news',    d:'Your area'},
+];
+const REGIONS = [
+  {id:'uk', e:'🇬🇧', t:'United Kingdom'},
+  {id:'us', e:'🇺🇸', t:'United States'},
+  {id:'eu', e:'🇪🇺', t:'Europe'},
+  {id:'me', e:'🌍', t:'Middle East & Africa'},
+  {id:'as', e:'🌏', t:'Asia-Pacific'},
+  {id:'latam', e:'🌎', t:'Latin America'},
+  {id:'global', e:'🛰', t:'Global (everywhere)'},
+];
+const LANGUAGES = ['English','Français','Español','Deutsch','العربية','中文','Português','हिन्दी'];
+const SUGGESTED_FOLLOWS = [
+  {id:'f1', nm:'Manchester City', bio:'Football club', tag:'⚽'},
+  {id:'f2', nm:'NASA', bio:'Space agency', tag:'🚀'},
+  {id:'f3', nm:'Bank of England', bio:'Central bank', tag:'🏦'},
+  {id:'f4', nm:'Taylor Swift', bio:'Musician', tag:'🎤'},
+  {id:'f5', nm:'OpenAI', bio:'AI research', tag:'🤖'},
+  {id:'f6', nm:'Premier League', bio:'Football', tag:'🏆'},
+  {id:'f7', nm:'Tesla', bio:'Automaker', tag:'🚗'},
+  {id:'f8', nm:'WHO', bio:'Global health', tag:'🩺'},
+];
+
+/* sample stories keyed by category, each with multiple sources + lean */
+const STORIES = {
+  politics:[
+    {h:'Parliament debates sweeping new energy bill', p:'MPs clashed over subsidy levels as the bill entered its second reading, with a vote expected next week.', src:['Reuters','BBC','The Guardian'], lean:'balanced', t:'32m ago'},
+    {h:'Local council approves £40m regeneration plan', p:'The scheme will add 600 homes and a new transport hub over five years.', src:['Local Gazette','BBC'], lean:'balanced', t:'2h ago'},
+  ],
+  sport:[
+    {h:'Late winner sends City top of the table', p:'A stoppage-time strike settled a tense derby and lifted the club above their rivals.', src:['Sky Sports','The Athletic','BBC Sport'], lean:'balanced', t:'48m ago'},
+    {h:'Grand Slam final set after semi-final upset', p:'The unseeded qualifier stunned the world number two in four sets.', src:['ESPN','Reuters'], lean:'balanced', t:'3h ago'},
+  ],
+  tech:[
+    {h:'New on-device AI chips announced', p:'The processors promise to run large models locally without sending data to the cloud.', src:['The Verge','Ars Technica','TechCrunch'], lean:'balanced', t:'1h ago'},
+    {h:'Regulators open probe into app store fees', p:'Developers welcomed the review while the company defended its pricing.', src:['Financial Times','The Verge'], lean:'lean', t:'4h ago'},
+  ],
+  world:[
+    {h:'Diplomats reach tentative ceasefire framework', p:'Negotiators described progress as fragile but real after three days of talks.', src:['AP','Reuters','Al Jazeera'], lean:'balanced', t:'55m ago'},
+  ],
+  business:[
+    {h:'Markets steady as inflation cools', p:'Investors responded positively to softer-than-expected price data.', src:['Bloomberg','Reuters','FT'], lean:'balanced', t:'1h ago'},
+  ],
+  science:[
+    {h:'Telescope captures sharpest image yet of distant galaxy', p:'Astronomers say the data could reshape models of early star formation.', src:['Nature','BBC Science'], lean:'balanced', t:'6h ago'},
+  ],
+  health:[
+    {h:'Large trial reports promising results for new therapy', p:'Researchers urged caution pending peer review and longer follow-up.', src:['The Lancet','Reuters Health'], lean:'balanced', t:'5h ago'},
+  ],
+  culture:[
+    {h:'Festival line-up revealed to strong reviews', p:'Critics praised a bold, genre-spanning programme for this year’s edition.', src:['The Guardian','Variety'], lean:'balanced', t:'7h ago'},
+  ],
+  climate:[
+    {h:'Renewables set new record share of the grid', p:'Wind and solar met a majority of demand for the first time on a working day.', src:['Carbon Brief','BBC','Reuters'], lean:'balanced', t:'3h ago'},
+  ],
+  finance:[
+    {h:'Savings rates edge up at major banks', p:'Analysts suggest shopping around as easy-access deals improve.', src:['This is Money','BBC'], lean:'balanced', t:'2h ago'},
+  ],
+  lifestyle:[
+    {h:'The quiet rise of the mid-week reset', p:'How a small Wednesday ritual is helping people beat the slump.', src:['The Times','Vogue'], lean:'balanced', t:'9h ago'},
+  ],
+  gaming:[
+    {h:'Long-awaited sequel gets a release date', p:'The studio confirmed a spring launch across all major platforms.', src:['IGN','Eurogamer'], lean:'balanced', t:'4h ago'},
+  ],
+  education:[
+    {h:'New guidance issued on classroom device use', p:'Schools are given more discretion over phones and tablets.', src:['TES','BBC'], lean:'balanced', t:'8h ago'},
+  ],
+  science2:[],
+};
+const FOLLOW_STORIES = {
+  'Manchester City':{h:'City confirm new signing ahead of deadline', p:'The midfielder joins on a four-year deal, the club announced.', src:['Sky Sports','Club statement'], t:'1h ago'},
+  'NASA':{h:'NASA sets date for next crewed launch window', p:'Mission managers completed a successful flight readiness review.', src:['NASA','Reuters'], t:'3h ago'},
+  'OpenAI':{h:'OpenAI publishes new safety research', p:'The paper outlines methods for evaluating model behaviour.', src:['OpenAI','The Verge'], t:'2h ago'},
+  'Tesla':{h:'Tesla reports quarterly delivery numbers', p:'Figures came in slightly ahead of analyst expectations.', src:['Bloomberg','Reuters'], t:'5h ago'},
+  'Taylor Swift':{h:'Tour adds new international dates', p:'Extra shows were announced following high demand.', src:['Variety','Billboard'], t:'6h ago'},
+  'Bank of England':{h:'Bank holds interest rates steady', p:'The committee voted to keep rates unchanged this month.', src:['FT','BBC','Reuters'], t:'4h ago'},
+  'Premier League':{h:'Full weekend fixture list confirmed', p:'Kick-off times adjusted for broadcast selections.', src:['Premier League','Sky Sports'], t:'7h ago'},
+  'WHO':{h:'WHO updates seasonal health guidance', p:'New recommendations issued ahead of winter.', src:['WHO','Reuters Health'], t:'8h ago'},
+};
+
+/* ---------- state ---------- */
+const DEFAULT_STATE = {
+  auth:false, email:'', name:'',
+  verified:false,
+  categories:['world','politics','tech','sport'],
+  region:'uk',
+  language:'English',
+  storiesPerSection:3,
+  follows:['Manchester City','NASA'],
+  balanced:true,
+  schedule:{ noon:{on:true, time:'12:00'}, evening:{on:true, time:'21:00'} },
+  consent:{ essential:true, personalisation:true, marketing:false, consentDate:null },
+  digestPeriod:'noon',
+};
+let S = load();
+function load(){
+  try{ const raw = localStorage.getItem('roundly_state'); if(raw){ return Object.assign({}, DEFAULT_STATE, JSON.parse(raw)); } }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT_STATE));
+}
+function save(){ try{ localStorage.setItem('roundly_state', JSON.stringify(S)); }catch(e){} syncUp(); }
+
+/* ============================================================
+   BACKEND CONNECTION
+   When this page is served BY the Roundly backend, ONLINE becomes true and
+   these calls hit the real API — real accounts, real twice-daily emails.
+   When opened as a static demo (e.g. GitHub Pages, no backend), ONLINE stays
+   false and everything falls back to browser-only localStorage behaviour.
+   ============================================================ */
+let ONLINE = false;
+async function api(path, opts){
+  const res = await fetch(path, Object.assign(
+    { headers:{'Content-Type':'application/json'}, credentials:'same-origin' }, opts||{}));
+  let data=null; try{ data=await res.json(); }catch(e){}
+  if(!res.ok) throw new Error((data&&data.error)||('Request failed ('+res.status+')'));
+  return data;
+}
+// Debounced push of the whole state to the backend.
+let syncT;
+function syncUp(){
+  if(!ONLINE || !S.auth) return;
+  clearTimeout(syncT);
+  syncT=setTimeout(()=>{
+    api('/api/state',{method:'PUT',body:JSON.stringify({
+      name:S.name, categories:S.categories, region:S.region, language:S.language,
+      storiesPerSection:S.storiesPerSection, balanced:S.balanced, follows:S.follows,
+      schedule:S.schedule,
+      consent:{personalisation:!!S.consent.personalisation, marketing:!!S.consent.marketing}
+    })}).catch(()=>{});
+  },600);
+}
+// Pull the whole state from the backend into S.
+async function pullState(){
+  const d = await api('/api/state');
+  S = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), d, {digestPeriod:S.digestPeriod||'noon'});
+  save();
+}
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const mount = $('#modalMount');
+function esc(s){ return (s||'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function scrollTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
+function go(id){ const el=document.querySelector(id); if(el) el.scrollIntoView({behavior:'smooth'}); }
+let toastT;
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600); }
+function closeModal(){ mount.innerHTML=''; }
+function initials(n){ return (n||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+
+/* build category showcase on landing */
+(function(){
+  const g=$('#catShowcase');
+  g.innerHTML = CATEGORIES.map(c=>`<div class="cat-chip"><span class="e">${c.e}</span>${c.t}</div>`).join('');
+})();
+
+/* ============================================================
+   AUTH — signup with GDPR consent + double opt-in simulation
+   ============================================================ */
+function openSignup(){
+  mount.innerHTML = `
+  <div class="overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal"><button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-pad">
+      <span class="badge">Step 1 of 2 · Create account</span>
+      <h2 class="step-title" style="margin-top:.5rem">Get your free roundup</h2>
+      <p class="step-sub">Two tidy news emails a day, built around you.</p>
+      <form onsubmit="submitSignup(event)">
+        <div class="field"><label class="req">Your name</label>
+          <input class="input" id="su_name" placeholder="e.g. Mahad" required></div>
+        <div class="field"><label class="req">Email address</label>
+          <input class="input" id="su_email" type="email" placeholder="you@email.com" required>
+          <div class="err hidden" id="su_email_err">Please enter a valid email.</div></div>
+        <div class="field"><label class="req">Create a password</label>
+          <input class="input" id="su_pass" type="password" placeholder="At least 8 characters" required>
+          <div class="hint" id="su_pass_hint">Use 8+ characters with a mix of letters and numbers.</div></div>
+
+        <div style="margin:18px 0 10px; font-weight:900; font-size:.85rem; color:var(--ink-soft)">YOUR CONSENT</div>
+        <label class="consent"><input type="checkbox" id="c_essential" checked disabled>
+          <span class="ct"><b>Essential service emails</b> — your daily roundups and account notices. Required to use Roundly.</span></label>
+        <label class="consent"><input type="checkbox" id="c_personalisation" checked>
+          <span class="ct"><b>Personalisation</b> — let Roundly use your choices and reading to tailor your roundups.</span></label>
+        <label class="consent"><input type="checkbox" id="c_marketing">
+          <span class="ct"><b>Product updates</b> (optional) — occasional news about new features. You can opt out anytime.</span></label>
+        <label class="consent"><input type="checkbox" id="c_terms" required>
+          <span class="ct req"><b>I agree</b> to the <a onclick="event.preventDefault();openLegal('terms')">Terms</a> and have read the <a onclick="event.preventDefault();openLegal('privacy')">Privacy Policy</a>.</span></label>
+
+        <button class="btn btn-primary btn-block" style="margin-top:14px" type="submit">Create account →</button>
+        <p class="hint" style="text-align:center; margin-top:12px">Already have an account? <button type="button" class="small-link" onclick="openLogin()">Log in</button></p>
+      </form>
+    </div></div>
+  </div>`;
+  setTimeout(()=>$('#su_name').focus(),50);
+}
+
+function submitSignup(e){
+  e.preventDefault();
+  const name=$('#su_name').value.trim();
+  const email=$('#su_email').value.trim();
+  const pass=$('#su_pass').value;
+  const okEmail=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+  $('#su_email_err').classList.toggle('hidden', okEmail);
+  if(!okEmail) return;
+  if(pass.length<8){ $('#su_pass_hint').innerHTML='<span style="color:var(--danger)">Password must be at least 8 characters.</span>'; return; }
+  if(!$('#c_terms').checked) return;
+  // record state + consent with timestamp (GDPR: proof of consent)
+  S.name=name; S.email=email; S.verified=false;
+  S.consent={ essential:true, personalisation:$('#c_personalisation').checked, marketing:$('#c_marketing').checked, consentDate:new Date().toISOString() };
+  if(ONLINE){
+    const btn=e.target.querySelector('button[type=submit]'); if(btn){btn.disabled=true;btn.textContent='Creating…';}
+    api('/api/auth/signup',{method:'POST',body:JSON.stringify({
+      name,email,password:pass,
+      consent:{personalisation:$('#c_personalisation').checked, marketing:$('#c_marketing').checked, terms:true}
+    })}).then(()=>{ openVerify(); })
+      .catch(err=>{ if(btn){btn.disabled=false;btn.textContent='Create account →';} toast(err.message||'Sign up failed'); });
+    return;
+  }
+  save();
+  openVerify();
+}
+
+/* double opt-in */
+function openVerify(){
+  const onlineBody = `
+      <div class="notice" style="text-align:left"><span>📬</span><span>Open the email from Roundly and click <b>Confirm my email</b>. This tab will pick it up automatically once you do.</span></div>
+      <button class="btn btn-ghost btn-block" onclick="closeModal()">Close</button>`;
+  const demoBody = `
+      <div class="notice" style="text-align:left"><span>🔎</span><span><b>Demo:</b> in the real product you'd click the link in your inbox. Press the button below to simulate confirming.</span></div>
+      <button class="btn btn-primary btn-block" onclick="verified()">✓ I've confirmed my email</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:10px" onclick="toast('Verification link re-sent 📨')">Resend link</button>`;
+  mount.innerHTML = `
+  <div class="overlay">
+    <div class="modal"><div class="modal-pad" style="text-align:center">
+      <div style="font-size:3rem">✉️</div>
+      <h2 class="step-title">Confirm your email</h2>
+      <p class="step-sub">We've sent a verification link to <b>${esc(S.email)}</b>.<br>Roundly never emails you until you confirm — that's the double opt-in that keeps things safe.</p>
+      ${ONLINE ? onlineBody : demoBody}
+    </div></div>
+  </div>`;
+}
+// Demo-only simulate.
+function verified(){
+  S.verified=true; S.auth=true; save();
+  closeModal();
+  openOnboarding();
+}
+// Online: complete verification from the emailed link (?token=…).
+async function completeVerification(token){
+  try{
+    await api('/api/auth/verify',{method:'POST',body:JSON.stringify({token})});
+    history.replaceState(null,'',location.pathname);   // strip token from URL
+    await pullState();
+    closeModal();
+    openOnboarding();   // verification only happens once, for a new account
+    toast('Email confirmed 🎉');
+  }catch(err){
+    toast(err.message||'That link is invalid or has expired.');
+  }
+}
+
+/* ---------- login ---------- */
+function openLogin(){
+  mount.innerHTML = `
+  <div class="overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal"><button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-pad">
+      <h2 class="step-title">Welcome back</h2>
+      <p class="step-sub">Log in to tune your roundups.</p>
+      <form onsubmit="submitLogin(event)">
+        <div class="field"><label>Email</label><input class="input" id="li_email" type="email" placeholder="you@email.com" value="${esc(S.email)}" required></div>
+        <div class="field"><label>Password</label><input class="input" id="li_pass" type="password" placeholder="Your password" required></div>
+        <button class="btn btn-primary btn-block" type="submit">Log in →</button>
+        <p class="hint" style="text-align:center;margin-top:12px">New here? <button type="button" class="small-link" onclick="openSignup()">Create an account</button></p>
+      </form>
+    </div></div>
+  </div>`;
+}
+function submitLogin(e){
+  e.preventDefault();
+  const email=$('#li_email').value.trim(), pass=$('#li_pass').value;
+  if(ONLINE){
+    const btn=e.target.querySelector('button[type=submit]'); if(btn){btn.disabled=true;btn.textContent='Logging in…';}
+    api('/api/auth/login',{method:'POST',body:JSON.stringify({email,password:pass})})
+      .then(async()=>{ await pullState(); closeModal(); enterApp(); })
+      .catch(err=>{ if(btn){btn.disabled=false;btn.textContent='Log in →';} toast(err.message||'Login failed'); });
+    return;
+  }
+  S.auth=true; if(!S.email) S.email=email; if(!S.name) S.name='there';
+  S.verified=true; save(); closeModal(); enterApp();
+}
+function logout(){
+  if(ONLINE){ api('/api/auth/logout',{method:'POST'}).catch(()=>{}); }
+  S.auth=false; save();
+  $('#app').classList.add('hidden'); $('#site').classList.remove('hidden'); scrollTop(); toast('Logged out');
+}
+
+/* ============================================================
+   ONBOARDING — categories, region, language, follows
+   ============================================================ */
+let ob = {step:0, cats:[], region:S.region, lang:S.language, follows:[]};
+function openOnboarding(){
+  ob = {step:0, cats:[...S.categories], region:S.region, lang:S.language, follows:[...S.follows]};
+  renderOnboarding();
+}
+function renderOnboarding(){
+  const steps=[obCats, obRegion, obFollow, obDone];
+  mount.innerHTML = `
+  <div class="overlay">
+    <div class="modal wide"><div class="modal-pad">
+      <div class="stepper">${[0,1,2,3].map(i=>`<div class="dot ${i<=ob.step?'on':''}"></div>`).join('')}</div>
+      <div id="obBody"></div>
+    </div></div>
+  </div>`;
+  steps[ob.step]();
+}
+function obNav(back,next,nextLabel,nextEnabled=true){
+  return `<div style="display:flex; justify-content:space-between; margin-top:22px; gap:10px">
+    ${back?`<button class="btn btn-ghost" onclick="${back}">← Back</button>`:'<span></span>'}
+    <button class="btn btn-primary" ${nextEnabled?'':'disabled'} onclick="${next}">${nextLabel}</button></div>`;
+}
+function obCats(){
+  $('#obBody').innerHTML = `
+    <h2 class="step-title">What do you want to hear about?</h2>
+    <p class="step-sub">Pick the categories for your roundups. Choose as many as you like — you can change these anytime.</p>
+    <div class="tiles">${CATEGORIES.map(c=>`
+      <div class="tile ${ob.cats.includes(c.id)?'sel':''}" onclick="obToggleCat('${c.id}')">
+        <span class="e">${c.e}</span><span class="t">${c.t}</span><span class="d">${c.d}</span><span class="tick">✓</span></div>`).join('')}</div>
+    ${obNav('', 'ob.cats.length&&(ob.step=1,renderOnboarding())', 'Continue →', true)}`;
+  refreshObNext();
+}
+function obToggleCat(id){ const i=ob.cats.indexOf(id); i>=0?ob.cats.splice(i,1):ob.cats.push(id); obCats(); }
+function refreshObNext(){}
+function obRegion(){
+  $('#obBody').innerHTML = `
+    <h2 class="step-title">Where in the world?</h2>
+    <p class="step-sub">Choose your primary region and the language you'd like to read in.</p>
+    <div style="font-weight:900;font-size:.82rem;color:var(--ink-soft);margin-bottom:8px">REGION</div>
+    <div class="tiles" style="margin-bottom:20px">${REGIONS.map(r=>`
+      <div class="tile ${ob.region===r.id?'sel':''}" onclick="ob.region='${r.id}';obRegion()">
+        <span class="e">${r.e}</span><span class="t">${r.t}</span><span class="tick">✓</span></div>`).join('')}</div>
+    <div style="font-weight:900;font-size:.82rem;color:var(--ink-soft);margin-bottom:8px">LANGUAGE</div>
+    <div class="seg">${LANGUAGES.map(l=>`<button class="${ob.lang===l?'on':''}" onclick="ob.lang='${l}';obRegion()">${l}</button>`).join('')}</div>
+    ${obNav('ob.step=0,renderOnboarding()','ob.step=2,renderOnboarding()','Continue →')}`;
+}
+function obFollow(){
+  $('#obBody').innerHTML = `
+    <h2 class="step-title">Follow what you love</h2>
+    <p class="step-sub">Add people, teams, companies or topics of high interest. They get their own section in your roundup.</p>
+    <div class="field"><input class="input" id="ob_follow_in" placeholder="Type a name and press Enter — e.g. Arsenal, Apple, climate policy" onkeydown="if(event.key==='Enter'){event.preventDefault();obAddFollow(this.value);this.value=''}"></div>
+    <div class="sourcebar" id="ob_follow_tags" style="margin-bottom:16px"></div>
+    <div style="font-weight:900;font-size:.82rem;color:var(--ink-soft);margin-bottom:8px">SUGGESTIONS</div>
+    <div class="tiles">${SUGGESTED_FOLLOWS.map(f=>`
+      <div class="tile ${ob.follows.includes(f.nm)?'sel':''}" onclick="obAddFollow('${f.nm.replace(/'/g,"\\'")}')">
+        <span class="e">${f.tag}</span><span class="t">${f.nm}</span><span class="d">${f.bio}</span><span class="tick">✓</span></div>`).join('')}</div>
+    ${obNav('ob.step=1,renderOnboarding()','ob.step=3,renderOnboarding()','Continue →')}`;
+  obRenderFollowTags();
+}
+function obAddFollow(v){ v=(v||'').trim(); if(!v) return; if(!ob.follows.includes(v)) ob.follows.push(v); obFollow(); }
+function obRemoveFollow(v){ ob.follows=ob.follows.filter(x=>x!==v); obFollow(); }
+function obRenderFollowTags(){
+  const el=$('#ob_follow_tags'); if(!el) return;
+  el.innerHTML = ob.follows.length? ob.follows.map(f=>`<span class="tag">${esc(f)} <span class="x" onclick="obRemoveFollow('${f.replace(/'/g,"\\'")}')">✕</span></span>`).join('') : '<span class="hint">No follows yet — optional, but nice to have.</span>';
+}
+function obDone(){
+  // commit onboarding to state
+  S.categories=[...ob.cats]; S.region=ob.region; S.language=ob.lang; S.follows=[...ob.follows]; save();
+  $('#obBody').innerHTML = `
+    <div style="text-align:center; padding:20px 0">
+      <div style="font-size:3.4rem">🎉</div>
+      <h2 class="step-title">You're all set, ${esc(S.name)}!</h2>
+      <p class="step-sub">Your first roundup lands at <b>noon</b>, the next at <b>9pm</b>. Here's a preview of what it'll look like.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="closeModal();enterApp();showTab('digest')">See my digest →</button>
+        <button class="btn btn-ghost" onclick="closeModal();enterApp();showTab('schedule')">Adjust my times</button>
+      </div>
+    </div>`;
+}
+
+/* ============================================================
+   APP / DASHBOARD
+   ============================================================ */
+function enterApp(){
+  $('#site').classList.add('hidden');
+  $('#app').classList.remove('hidden');
+  $('#userchip').textContent = S.email ? `👋 ${S.name} · ${S.email}` : '';
+  scrollTop();
+  renderAll();
+}
+function showTab(tab){
+  document.querySelectorAll('.side .snav button').forEach(b=>b.classList.toggle('on', b.dataset.tab===tab));
+  document.querySelectorAll('.dash-main .page').forEach(p=>p.classList.add('hidden'));
+  $('#tab-'+tab).classList.remove('hidden');
+  ({digest:renderDigest,topics:renderTopics,region:renderRegion,follow:renderFollow,schedule:renderSchedule,account:renderAccount}[tab])();
+  window.scrollTo({top:0});
+}
+function renderAll(){ renderDigest(); }
+
+/* ---- digest ---- */
+function periodMeta(p){
+  return p==='noon'
+    ? {kick:'Your Noon Roundup', hi:'Good afternoon', emoji:'☀️', time:S.schedule.noon.time}
+    : {kick:'Your Evening Roundup', hi:'Good evening', emoji:'🌙', time:S.schedule.evening.time};
+}
+function leanBadge(lean){
+  return lean==='balanced'
+    ? `<span class="balance">⚖️ Balanced coverage</span>`
+    : `<span class="balance" style="background:#fdeecf;color:#a4741a">◐ Leans one way — read widely</span>`;
+}
+function storyHTML(s){
+  return `<div class="story">
+    <h4>${esc(s.h)}</h4><p>${esc(s.p)}</p>
+    <div class="foot">
+      ${s.src.map(x=>`<span class="src-pill"><span class="dotm"></span>${esc(x)}</span>`).join('')}
+      ${s.lean?leanBadge(s.lean):''}
+      <span class="meta">· ${s.t}</span>
+    </div></div>`;
+}
+function renderDigest(){
+  const per = S.digestPeriod||'noon';
+  const m = periodMeta(per);
+  const today = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  const activeCats = S.categories.map(id=>CATEGORIES.find(c=>c.id===id)).filter(Boolean);
+  let sectionsHTML = activeCats.map(c=>{
+    let list = STORIES[c.id]||[];
+    if(!list.length) list=[{h:`Latest in ${c.t.toLowerCase()}`, p:'Roundly will fill this section with the top stories from your chosen sources.', src:['Reuters','AP'], lean:'balanced', t:'today'}];
+    list = list.slice(0, S.storiesPerSection);
+    return `<div class="dsec"><div class="dlab">${c.e} ${esc(c.t)}</div>${list.map(storyHTML).join('')}</div>`;
+  }).join('');
+  let followHTML = '';
+  if(S.follows.length){
+    const items = S.follows.map(f=> FOLLOW_STORIES[f] ? {...FOLLOW_STORIES[f], _f:f} : {h:`New updates on ${f}`, p:`Roundly is tracking "${f}" across your sources.`, src:['Multiple sources'], t:'today', _f:f});
+    followHTML = `<div class="dsec" style="background:var(--surface-2)"><div class="dlab" style="color:var(--brand-ink)">👥 Following · ${S.follows.length}</div>${items.map(storyHTML).join('')}</div>`;
+  }
+  $('#tab-digest').innerHTML = `
+    <h1 class="dash-h">Today's digest</h1>
+    <p class="dash-sub">A live preview of the roundup Roundly will send you. Every story shows its sources.</p>
+    <div class="seg" style="margin-bottom:18px">
+      <button class="${per==='noon'?'on':''}" onclick="S.digestPeriod='noon';save();renderDigest()">☀️ Noon · ${S.schedule.noon.time}</button>
+      <button class="${per==='evening'?'on':''}" onclick="S.digestPeriod='evening';save();renderDigest()">🌙 Evening · ${S.schedule.evening.time}</button>
+    </div>
+    <div class="notice"><span>✅</span><span>This roundup is built from <b>${activeCats.length} categories</b>, region <b>${REGIONS.find(r=>r.id===S.region).t}</b>, in <b>${S.language}</b>${S.follows.length?`, plus <b>${S.follows.length}</b> follows`:''}. <button class="small-link" onclick="showTab('topics')">Change</button></span></div>
+    <div class="digest">
+      <div class="digest-hd">
+        <div class="kick">${m.kick} · ${today}</div>
+        <h2>${m.hi}, ${esc(S.name||'there')} ${m.emoji}</h2>
+        <div class="sub">${activeCats.length} sections · sources cited on every story · arrives ${m.time}</div>
+      </div>
+      ${followHTML}
+      ${sectionsHTML}
+      <div class="dsec" style="text-align:center;color:var(--ink-faint);font-size:.82rem;font-weight:700">
+        You're receiving this because you subscribed to Roundly.<br>
+        <a onclick="showTab('schedule')">Change frequency</a> · <a onclick="showTab('account')">Manage preferences</a> · <a onclick="toast('In the real product this unsubscribes you instantly.')">Unsubscribe</a>
+      </div>
+    </div>`;
+}
+
+/* ---- topics/categories ---- */
+function renderTopics(){
+  $('#tab-topics').innerHTML = `
+    <h1 class="dash-h">Categories</h1>
+    <p class="dash-sub">Tap to add or remove. Your roundup is segmented so each stays clearly separated.</p>
+    <div class="panel">
+      <h3>Your topics <span class="pill-count">${S.categories.length}</span></h3>
+      <p class="desc">Choose everything you care about — Roundly keeps each category balanced and labelled.</p>
+      <div class="tiles">${CATEGORIES.map(c=>`
+        <div class="tile ${S.categories.includes(c.id)?'sel':''}" onclick="toggleCat('${c.id}')">
+          <span class="e">${c.e}</span><span class="t">${c.t}</span><span class="d">${c.d}</span><span class="tick">✓</span></div>`).join('')}</div>
+    </div>
+    <div class="panel">
+      <h3>Stories per section</h3>
+      <p class="desc">How many headlines you want in each category, per roundup.</p>
+      <div class="seg">${[2,3,4,5].map(n=>`<button class="${S.storiesPerSection===n?'on':''}" onclick="S.storiesPerSection=${n};save();renderTopics();toast('${n} stories per section')">${n}</button>`).join('')}</div>
+    </div>
+    <div class="panel">
+      <div class="row-split"><div class="l"><div class="t">⚖️ Balanced coverage</div><div class="s">Pull from a wide range of outlets and flag one-sided stories.</div></div>
+        <label class="switch"><input type="checkbox" ${S.balanced?'checked':''} onchange="S.balanced=this.checked;save();toast('Balanced coverage '+(this.checked?'on':'off'))"><span class="slider"></span></label></div>
+    </div>`;
+}
+function toggleCat(id){
+  const i=S.categories.indexOf(id);
+  if(i>=0){ if(S.categories.length<=1){ toast('Keep at least one category 🙂'); return;} S.categories.splice(i,1); }
+  else S.categories.push(id);
+  save(); renderTopics();
+}
+
+/* ---- region & language ---- */
+function renderRegion(){
+  $('#tab-region').innerHTML = `
+    <h1 class="dash-h">Region &amp; language</h1>
+    <p class="dash-sub">Where your news comes from, and how you read it.</p>
+    <div class="panel"><h3>Primary region</h3><p class="desc">Roundly prioritises sources and stories from here.</p>
+      <div class="tiles">${REGIONS.map(r=>`
+        <div class="tile ${S.region===r.id?'sel':''}" onclick="S.region='${r.id}';save();renderRegion();toast('Region: ${r.t}')">
+          <span class="e">${r.e}</span><span class="t">${r.t}</span><span class="tick">✓</span></div>`).join('')}</div></div>
+    <div class="panel"><h3>Language</h3><p class="desc">Your roundups are delivered in this language.</p>
+      <div class="seg">${LANGUAGES.map(l=>`<button class="${S.language===l?'on':''}" onclick="S.language='${l.replace(/'/g,"\\'")}';save();renderRegion();toast('Language: ${l}')">${l}</button>`).join('')}</div></div>`;
+}
+
+/* ---- follows ---- */
+function renderFollow(){
+  $('#tab-follow').innerHTML = `
+    <h1 class="dash-h">Following</h1>
+    <p class="dash-sub">People, teams, companies and topics you want a dedicated section for.</p>
+    <div class="panel">
+      <h3>Add a follow</h3>
+      <div class="field"><input class="input" id="fl_in" placeholder="Type a name and press Enter — e.g. Arsenal, SpaceX, UK housing" onkeydown="if(event.key==='Enter'){event.preventDefault();addFollow(this.value);this.value=''}"></div>
+      <div class="sourcebar" id="fl_tags"></div>
+    </div>
+    <div class="panel">
+      <h3>Suggestions</h3><p class="desc">Popular follows to get you started.</p>
+      <div>${SUGGESTED_FOLLOWS.map(f=>`
+        <div class="follow-row">
+          <div class="avatar">${f.tag}</div>
+          <div class="meta"><div class="nm">${f.nm}</div><div class="bio">${f.bio}</div></div>
+          <button class="btn ${S.follows.includes(f.nm)?'btn-ghost':'btn-soft'} btn-sm" onclick="toggleFollow('${f.nm.replace(/'/g,"\\'")}')">${S.follows.includes(f.nm)?'Following ✓':'+ Follow'}</button>
+        </div>`).join('')}</div>
+    </div>`;
+  renderFollowTags();
+}
+function renderFollowTags(){
+  const el=$('#fl_tags'); if(!el) return;
+  el.innerHTML = S.follows.length ? S.follows.map(f=>`<span class="tag">${esc(f)} <span class="x" onclick="removeFollow('${f.replace(/'/g,"\\'")}')">✕</span></span>`).join('') : '<span class="hint">Nothing yet — add anything you want to keep a close eye on.</span>';
+}
+function addFollow(v){ v=(v||'').trim(); if(!v) return; if(!S.follows.includes(v)) S.follows.push(v); save(); renderFollow(); toast('Following '+v); }
+function removeFollow(v){ S.follows=S.follows.filter(x=>x!==v); save(); renderFollow(); }
+function toggleFollow(v){ S.follows.includes(v)?removeFollow(v):addFollow(v); }
+
+/* ---- schedule ---- */
+function renderSchedule(){
+  const noon=S.schedule.noon, eve=S.schedule.evening;
+  $('#tab-schedule').innerHTML = `
+    <h1 class="dash-h">Schedule</h1>
+    <p class="dash-sub">Roundly sends two roundups a day. Nudge the times to fit your routine, or pause either one.</p>
+    <div class="sched">
+      <div class="sched-card ${noon.on?'on':''}">
+        <div class="when">☀️ Midday</div>
+        <div class="lab">A catch-up over lunch</div>
+        <div class="row-split" style="border:none;padding:0"><div class="l"><div class="t">Send this roundup</div></div>
+          <label class="switch"><input type="checkbox" ${noon.on?'checked':''} onchange="S.schedule.noon.on=this.checked;save();renderSchedule()"><span class="slider"></span></label></div>
+        <div class="time-in"><input class="input" type="time" value="${noon.time}" ${noon.on?'':'disabled'} onchange="S.schedule.noon.time=this.value;save();toast('Midday roundup at '+this.value)"></div>
+      </div>
+      <div class="sched-card ${eve.on?'on':''}">
+        <div class="when">🌙 Evening</div>
+        <div class="lab">Wind down with the day's news</div>
+        <div class="row-split" style="border:none;padding:0"><div class="l"><div class="t">Send this roundup</div></div>
+          <label class="switch"><input type="checkbox" ${eve.on?'checked':''} onchange="S.schedule.evening.on=this.checked;save();renderSchedule()"><span class="slider"></span></label></div>
+        <div class="time-in"><input class="input" type="time" value="${eve.time}" ${eve.on?'':'disabled'} onchange="S.schedule.evening.time=this.value;save();toast('Evening roundup at '+this.value)"></div>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:18px">
+      <div class="row-split"><div class="l"><div class="t">Timezone</div><div class="s">Times are sent in your local timezone.</div></div>
+        <select class="input" style="width:auto" onchange="toast('Timezone: '+this.value)">
+          <option>Europe/London (BST)</option><option>Europe/Paris</option><option>America/New_York</option><option>Asia/Dubai</option><option>Asia/Singapore</option>
+        </select></div>
+      <div class="row-split"><div class="l"><div class="t">Weekend roundups</div><div class="s">Get a lighter edition on Saturday & Sunday.</div></div>
+        <label class="switch"><input type="checkbox" checked onchange="toast('Weekend roundups '+(this.checked?'on':'off'))"><span class="slider"></span></label></div>
+    </div>
+    <div class="notice"><span>🕛</span><span>Default times are <b>12:00</b> and <b>21:00</b> — the two you asked for. Turn either off and Roundly simply sends the other.</span></div>`;
+}
+
+/* ---- account & privacy (GDPR) ---- */
+function renderAccount(){
+  const c=S.consent;
+  const cd = c.consentDate ? new Date(c.consentDate).toLocaleString('en-GB') : '—';
+  $('#tab-account').innerHTML = `
+    <h1 class="dash-h">Account &amp; privacy</h1>
+    <p class="dash-sub">You're in control of your data. Everything here is instant and self-serve.</p>
+
+    <div class="panel"><h3>Profile</h3>
+      <div class="two">
+        <div class="field"><label>Name</label><input class="input" value="${esc(S.name)}" onchange="S.name=this.value;save();$('#userchip').textContent='👋 '+S.name+' · '+S.email;toast('Name updated')"></div>
+        <div class="field"><label>Email</label><input class="input" value="${esc(S.email)}" onchange="S.email=this.value;save();toast('A confirmation link would be sent to verify the change')"></div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="toast('Password reset link sent 📨')">Change password</button>
+    </div>
+
+    <div class="panel"><h3>Your consent</h3>
+      <p class="desc">Granular and withdrawable at any time. Consent recorded: <b>${cd}</b></p>
+      <div class="row-split"><div class="l"><div class="t">Essential service emails</div><div class="s">Your roundups & account notices. Required.</div></div>
+        <label class="switch"><input type="checkbox" checked disabled><span class="slider"></span></label></div>
+      <div class="row-split"><div class="l"><div class="t">Personalisation</div><div class="s">Tailor roundups to your choices & reading.</div></div>
+        <label class="switch"><input type="checkbox" ${c.personalisation?'checked':''} onchange="S.consent.personalisation=this.checked;S.consent.consentDate=new Date().toISOString();save();renderAccount();toast('Consent updated')"><span class="slider"></span></label></div>
+      <div class="row-split"><div class="l"><div class="t">Product updates</div><div class="s">Occasional feature news. Optional.</div></div>
+        <label class="switch"><input type="checkbox" ${c.marketing?'checked':''} onchange="S.consent.marketing=this.checked;S.consent.consentDate=new Date().toISOString();save();renderAccount();toast('Consent updated')"><span class="slider"></span></label></div>
+    </div>
+
+    <div class="panel"><h3>Your data rights</h3>
+      <p class="desc">Under the GDPR you can access, port and erase your data. Do it yourself, right here.</p>
+      <div class="two">
+        <button class="btn btn-soft btn-block" onclick="exportData()">📦 Export my data (JSON)</button>
+        <button class="btn btn-ghost btn-block" onclick="openLegal('gdpr')">📖 Read my rights</button>
+      </div>
+    </div>
+
+    <div class="panel"><h3>Notifications</h3>
+      <div class="row-split"><div class="l"><div class="t">Pause all roundups</div><div class="s">Temporarily stop both emails without deleting anything.</div></div>
+        <label class="switch"><input type="checkbox" onchange="toast(this.checked?'Roundups paused':'Roundups resumed')"><span class="slider"></span></label></div>
+    </div>
+
+    <div class="danger-zone">
+      <h3 style="color:var(--danger);margin:0 0 .3rem">Delete my account</h3>
+      <p class="desc" style="margin-bottom:12px">Permanently erase your account and all data we hold. This can't be undone.</p>
+      <button class="btn btn-block" style="background:var(--danger);color:#fff" onclick="confirmDelete()">Delete everything</button>
+    </div>`;
+}
+function exportData(){
+  if(ONLINE){ window.location.href='/api/gdpr/export'; toast('Your data is downloading 📦'); return; }
+  const data = JSON.stringify({exportedAt:new Date().toISOString(), account:{name:S.name,email:S.email}, preferences:{categories:S.categories,region:S.region,language:S.language,storiesPerSection:S.storiesPerSection,follows:S.follows,schedule:S.schedule}, consent:S.consent}, null, 2);
+  const blob=new Blob([data],{type:'application/json'}); const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='roundly-my-data.json'; a.click(); URL.revokeObjectURL(url);
+  toast('Your data exported 📦');
+}
+function confirmDelete(){
+  mount.innerHTML = `
+  <div class="overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal"><div class="modal-pad" style="text-align:center">
+      <div style="font-size:2.6rem">🗑️</div>
+      <h2 class="step-title">Delete your account?</h2>
+      <p class="step-sub">This erases your profile, preferences and consent records permanently. There's no undo.</p>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button class="btn btn-ghost" onclick="closeModal()">Keep my account</button>
+        <button class="btn" style="background:var(--danger);color:#fff" onclick="reallyDelete()">Yes, delete everything</button>
+      </div>
+    </div></div>
+  </div>`;
+}
+async function reallyDelete(){
+  if(ONLINE){ try{ await api('/api/gdpr/account',{method:'DELETE'}); }catch(e){} }
+  localStorage.removeItem('roundly_state'); S=JSON.parse(JSON.stringify(DEFAULT_STATE));
+  closeModal(); $('#app').classList.add('hidden'); $('#site').classList.remove('hidden'); scrollTop();
+  toast('Account deleted. Sorry to see you go 💛');
+}
+
+/* ============================================================
+   PREVIEW (public sample digest) + legal pages
+   ============================================================ */
+function openPreview(){
+  const cats=['politics','sport','tech','world'].map(id=>CATEGORIES.find(c=>c.id===id));
+  const sections = cats.map(c=>`<div class="dsec"><div class="dlab">${c.e} ${c.t}</div>${(STORIES[c.id]||[]).slice(0,2).map(storyHTML).join('')}</div>`).join('');
+  mount.innerHTML = `
+  <div class="overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal"><button class="modal-close" onclick="closeModal()">✕</button>
+    <div style="padding:0">
+      <div class="digest" style="border:none;box-shadow:none">
+        <div class="digest-hd"><div class="kick">Sample Noon Roundup · Today</div><h2>Good afternoon ☀️</h2><div class="sub">4 sections · every source cited</div></div>
+        ${sections}
+        <div class="dsec" style="text-align:center">
+          <button class="btn btn-primary" onclick="closeModal();openSignup()">Get this in my inbox →</button>
+        </div>
+      </div>
+    </div></div>
+  </div>`;
+}
+
+const LEGAL = {
+  privacy:{t:'Privacy Policy',b:`<p>This is a concept product, but here's how Roundly is designed to treat your data.</p>
+    <h4>What we collect</h4><p>Your name, email, the preferences you set (categories, region, language, follows, schedule) and your consent choices with timestamps. That's it — no tracking pixels sold to third parties.</p>
+    <h4>Why we collect it</h4><p>Solely to build and send your two daily roundups, and to prove you consented (a legal basis under the GDPR).</p>
+    <h4>Who we share with</h4><p>Only the infrastructure providers needed to run the service (email delivery, hosting), each bound by data-processing agreements. News content is aggregated from public sources, always credited and linked.</p>
+    <h4>How long we keep it</h4><p>Until you delete your account, which erases everything immediately.</p>
+    <h4>Your rights</h4><p>Access, rectification, portability, erasure, and withdrawal of consent — all self-serve in your dashboard.</p>`},
+  cookies:{t:'Cookie Policy',b:`<p>Roundly uses the minimum cookies needed to keep you logged in and remember your preferences. We do not use advertising or cross-site tracking cookies. You can decline non-essential cookies without losing any core functionality.</p>`},
+  terms:{t:'Terms of Service',b:`<p>By using Roundly you agree to receive the roundups you configure and to use the service lawfully. Roundly aggregates and links to third-party news; the copyright and views in each article belong to the original publisher. Roundly is provided "as is" as a concept demo.</p>`},
+  gdpr:{t:'Your GDPR rights',b:`<p>You have the right to:</p>
+    <h4>Be informed</h4><p>Know what data we hold and why — see the Privacy Policy.</p>
+    <h4>Access & portability</h4><p>Download everything we hold in a machine-readable file, anytime, from Account → Export my data.</p>
+    <h4>Rectification</h4><p>Correct your details directly in your dashboard.</p>
+    <h4>Erasure ("right to be forgotten")</h4><p>Delete your account and all associated data instantly from Account → Delete my account.</p>
+    <h4>Withdraw consent</h4><p>Toggle any non-essential consent off at any time. Withdrawal is as easy as giving it.</p>
+    <h4>Object & restrict</h4><p>Pause processing (pause roundups) or contact our Data Protection Officer for anything else.</p>`},
+};
+function openLegal(k){
+  const L=LEGAL[k];
+  mount.innerHTML = `
+  <div class="overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal"><button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-pad legal">
+      <span class="badge">Legal</span>
+      <h2 class="step-title" style="margin-top:.5rem">${L.t}</h2>
+      ${L.b}
+      <button class="btn btn-ghost btn-block" style="margin-top:18px" onclick="closeModal()">Close</button>
+    </div></div>
+  </div>`;
+}
+
+/* ---------- boot ---------- */
+async function boot(){
+  // Is a real backend serving this page? (health check; fails silently on static hosts)
+  try{
+    const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(),4000);
+    const r=await fetch('/health',{signal:ctrl.signal}); clearTimeout(t);
+    ONLINE = r.ok;
+  }catch(e){ ONLINE=false; }
+
+  const token = new URLSearchParams(location.search).get('token');
+
+  if(ONLINE){
+    // Complete email verification if we arrived from the emailed link.
+    if(token){ await completeVerification(token); return; }
+    // Otherwise, resume an existing session if there is one.
+    try{ await api('/api/auth/me'); await pullState(); enterApp(); }
+    catch(e){ /* not logged in — show the marketing site */ }
+    return;
+  }
+
+  // Demo mode (no backend): restore local session.
+  if(S.auth && S.verified){ enterApp(); }
+}
+boot();
+</script>
